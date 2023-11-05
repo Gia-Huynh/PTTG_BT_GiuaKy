@@ -1,8 +1,8 @@
 from tkinter import Tk
 
 from constant import window
-from views.control import Control
-from views.image import Image
+from views.control import Control_View
+from views.image import Image_View
 
 class Root(Tk):
     def __init__(self):
@@ -18,9 +18,18 @@ class Root(Tk):
         self.title("Something something")
 
         # The control frame is 0.8 height and 0.3 width of the root frame
-        self.control = Control(self)
-        self.control.place(relheight=0.8, relwidth=0.2)
+        self.control = Control_View(self)
+        self.control.place(relwidth=0.2, relheight=1)
 
         # The image frame is 0.8 height and 0.7 width of the root frame
-        self.image = Image(self)
-        self.image.place(relheight=0.8, relwidth=0.8, relx=0.2)
+        self.image = Image_View(self)
+        self.image.place(relwidth=0.8, relheight=1, relx=0.2)
+
+    def set_image_callback(self, callback):
+        self.control.set_image_callback(callback)
+
+    def update_image(self, image):
+        self.image.set_image(image)
+
+    def start(self):
+        self.mainloop()

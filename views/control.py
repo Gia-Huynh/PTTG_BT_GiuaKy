@@ -16,11 +16,10 @@ class Control_View(tk.Frame):
         self.upload_button = Button(self, image_upload_callback)
         self.upload_button.pack(side=tk.TOP, fill=tk.X)
 
-        # Generate a bunch of buttons for placeholder
-        for i in range(2):
-            button = tk.Button(self, text=f"Button {i}")
-            self.buttons.append(button)
-            self.buttons[i].pack(side=tk.TOP, fill=tk.X)
+        # Slider for resize image
+        self.slider = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL)
+        self.slider.set(50)
+        self.slider.pack(side=tk.TOP, fill=tk.X)
 
     def set_image_callback(self, callback):
         self.upload_button.set_callback(callback)

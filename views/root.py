@@ -17,11 +17,9 @@ class Root(Tk):
         self.minsize(width=min_width, height=min_height)
         self.title("Something something")
 
-        # The control frame is 0.8 height and 0.3 width of the root frame
         self.control = Control_View(self)
         self.control.place(relwidth=0.2, relheight=1)
 
-        # The image frame is 0.8 height and 0.7 width of the root frame
         self.image = Image_View(self)
         self.image.place(relwidth=0.8, relheight=1, relx=0.2)
 

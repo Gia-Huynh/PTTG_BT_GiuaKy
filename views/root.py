@@ -20,14 +20,8 @@ class Root(Tk):
         self.control = Control_View(self)
         self.control.place(relwidth=0.2, relheight=1)
 
-        self.image = Image_View(self)
-        self.image.place(relwidth=0.8, relheight=1, relx=0.2)
-
-    def set_image_callback(self, callback):
-        self.control.set_image_callback(callback)
-
-    def update_image(self, image):
-        self.image.set_image(image)
+        self.display = Image_View(self)
+        self.display.place(relwidth=0.8, relheight=1, relx=0.2)
 
     def start(self):
         self.mainloop()

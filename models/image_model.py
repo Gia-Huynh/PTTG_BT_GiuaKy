@@ -24,9 +24,10 @@ class Image_Model():
                 return False
             self.image_path = image_path
 
-            # Convert image to Tkinter readable format
-            # image = ImageTk.PhotoImage(image)
-
             # Set image data
             self.image_data = image
         return True
+    
+    def reset(self):
+        self.image_path = None
+        self.image_data = None

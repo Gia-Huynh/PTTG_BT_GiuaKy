@@ -29,6 +29,15 @@ def svd(A):
     
     return U, Sigma, V.T
 
+def visualize(img, r = 200):
+    img = cv2.resize(img, (160, 160))
+    U, S, V = svd(img)
+    S = np.diag(S)
+    # print(U, S ,V)
+    img_approx = U[:, :r] @ S[0:r, :r] @ V[:r, :]
+
+    return img_approx
+
 if __name__ == "__main__":
     img = cv2.imread("test.jpg", 0)
     img = cv2.resize(img, (160, 160))

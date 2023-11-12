@@ -5,9 +5,6 @@ class Image_View(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        self.pack_propagate(False)
-        self.config(bg='black')
-
         # self.label = tk.Label(parent)
         self.label = tk.Label(self)
         self.label.pack()

@@ -46,8 +46,10 @@ class SVD_Controller:
     
     def get_loss(self, r):
         img_approx = self.get_image_approximation(r)
-        loss = np.sum(np.square(self.image - img_approx))
-        return loss
+        max_intensity = np.max(self.image)
+        mse = np.mean(np.square(self.image - img_approx))
+        psnr = 20 * np.log10(max_intensity / np.sqrt(mse))
+        return psnr
     
     def submit_compression(self, event):
         # Get the k number from the slider

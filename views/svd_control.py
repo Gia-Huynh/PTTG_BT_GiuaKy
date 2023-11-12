@@ -34,9 +34,13 @@ class SVD_Control_View(tk.Frame):
         self.distance_values = tk.Label(self, text="0")
         self.distance_values.grid(row=9)
 
+        # Export compressed image
+        self.export_button = tk.Button(self, text="Export")
+        self.export_button.grid(row=10)
+
         # Go back button
         self.back_button = tk.Button(self, text="Back")
-        self.back_button.grid(row=10)
+        self.back_button.grid(row=12)
 
     def update_max_k(self, max_k):
         self.compression_rate_slider.config(to=max_k)

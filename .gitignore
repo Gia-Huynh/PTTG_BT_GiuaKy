@@ -1,0 +1,8 @@
+lfw/*
+lfw/*/*
+lfw/*/*/*
+Temp/*
+Temp/*/*/*
+*.tar
+*.gz
+*.tgz

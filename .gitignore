@@ -1,1 +1,10 @@
 __pycache__
+
+lfw/*
+lfw/*/*
+lfw/*/*/*
+Temp/*
+Temp/*/*/*
+*.tar
+*.gz
+*.tgz

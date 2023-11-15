@@ -8,6 +8,7 @@ class Image_Model():
     def __init__(self):
         self.image_path = None
         self.image_data = None
+        self.image_cv = None
 
     def get_image_path(self):
         return self.image_path

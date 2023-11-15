@@ -2,6 +2,7 @@ from tkinter import Tk
 
 from views.control import Control_View
 from views.svd_control import SVD_Control_View
+from views.pca_control import PCA_Control_View
 from views.image import Image_View
 from utils.screen_status import Screen
 
@@ -19,7 +20,7 @@ class Root(Tk):
         self.controls = {
             Screen.DEFAULT: Control_View(self),
             Screen.SVD: SVD_Control_View(self),
-            Screen.PCA: None, # TODO
+            Screen.PCA: PCA_Control_View(self),
         }
 
         for control in self.controls.values():
@@ -37,6 +38,7 @@ class Root(Tk):
 
     def set_pca(self):
         self.screen_status = Screen.PCA
+        self.update_control()
 
     def set_default(self):
         self.screen_status = Screen.DEFAULT

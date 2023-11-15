@@ -50,7 +50,7 @@ class EigenFace:
         print("Chuyển hệ cơ sở của dữ liệu đầu vào sang hệ cơ sở vuông góc eigenfaces")
         X_train_pca = pca.transform(X_train)
         X_test_pca = pca.transform(X_test)
-        # print("Fitting the classifier to the training set")
+        print("Fitting the classifier to the training set")
         print("Khớp hóa (fitting) mô hình dự đoán vào bộ dữ liệu huấn luyện")
         param_grid = {
             "C": loguniform(1e3, 1e5),
@@ -74,6 +74,13 @@ class EigenFace:
         pred_name = target_names[y_pred[i]].rsplit(" ", 1)[-1]
         true_name = target_names[y_test[i]].rsplit(" ", 1)[-1]
         return "Predicted: %s, True:      %s" % (pred_name, true_name)
+    def GetFeatureVectors (self, imgPath):
+        #inpImg: Greyscale, size: 62 x 47
+        #"lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg"
+        img2D = np.mean(cv2.resize (cv2.imread (imgPath), (47, 62)), axis = 2)
+        img1D = np.ravel (img2D).reshape(1, -1)
+        img1D = self.scaler.transform(img1D)
+        return self.pca.transform(img1D)
     def predict_img_path (self, imgPath):
         #inpImg: Greyscale, size: 62 x 47
         #"lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg"
@@ -85,12 +92,7 @@ class EigenFace:
         return self.target_names[result[0]].rsplit(" ", 1)[-1]
     def predict_img_list (self, inpImg):
         pass
-    def get_pca(self, image):
-        img2D = np.mean(cv2.resize(image, (47, 62)), axis = 2)
-        img1D = np.ravel (img2D).reshape(1, -1)
-        img1D = self.scaler.transform(img1D)
-        img1d_pca = self.pca.transform(img1D)
-        return img1d_pca
     
-ey = EigenFace ()
+# ey = EigenFace ()
 # result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+# result = ey.GetFeatureVectors("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")

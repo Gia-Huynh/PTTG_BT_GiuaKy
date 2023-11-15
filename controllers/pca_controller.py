@@ -21,6 +21,12 @@ class PCA_Controller:
         predict = self.pca.predict_img_path(self.image_model.get_image_path())
         self.image_view.control.update_predict(predict)
 
+        eigenface = self.pca.GetFeatureVectors(self.image_model.get_image_path())
+        eigenface = eigenface.reshape((62, 47))
+        print(eigenface)
+        # image = Image.fromarray(eigenface)
+        # self.image_view.display.set_image(image)
+
     def back(self, event):
         self.image_view.set_default()
         self.image_view.display.set_image(self.image_model.get_image_data())

@@ -19,6 +19,9 @@ class Image_Model():
     def get_image_cv(self):
         return self.image_cv
     
+    def get_image_cv_colour(self):
+        return self.image_cv_colour
+    
     def set_image_path(self, image_path):
         # Valid path
         if image_path:
@@ -26,12 +29,14 @@ class Image_Model():
             try:
                 image_tk = Image.open(image_path)
                 image_cv = cv2.imread(image_path, 0)
+                image_cv_colour = cv2.imread(image_path)
             except:
                 return False
             self.image_path = image_path
 
             # Set image data
             self.image_data = image_tk
+            self.image_cv_colour = image_cv_colour
             # Find the nearest squared number for the image size
             image_size = math.sqrt(min(image_cv.shape[:2]))
             image_size = int(image_size)

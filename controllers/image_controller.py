@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 
 from controllers.svd_controller import SVD_Controller
 from controllers.pca_controller import PCA_Controller
+from utils.EigenFace import EigenFace
 
 class Image_Controller:
     def __init__(self, image_model, image_view):
@@ -17,6 +18,9 @@ class Image_Controller:
         self.image_control.reset_button.bind("<Button-1>", self.reset)
         self.image_control.svd_button.bind("<Button-1>", self.svd_triggered)
         self.image_control.pca_button.bind("<Button-1>", self.pca_triggered)
+
+        # Other
+        self.eigen_face = EigenFace()
 
     def upload_image(self, event):
         image_path = tk.filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg *.png *.jpeg *.gif *.bmp *.tiff *.tif *.jfif *.ico *.eps *.raw *.cr2 *.nef *.orf *.sr2 *.webp *.heif *.heic *.svg *.ai *.eps *.ps *.psd *.svgz *.wmf *.emf *.jfif *.jpe *.jpeg *.jif *.jfi")])
@@ -52,5 +56,5 @@ class Image_Controller:
     def pca_triggered(self, event):
         if self.image_model.get_image_cv() is not None:
             self.image_view.set_pca()
-            self.svd_controller = PCA_Controller(self.image_model, self.image_view)
+            self.svd_controller = PCA_Controller(self.image_model, self.image_view, self.eigen_face)
         return True

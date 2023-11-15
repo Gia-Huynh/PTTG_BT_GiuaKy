@@ -5,14 +5,14 @@ class Control_View(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         # Add widgets here
-        self.label = tk.Label(self, text="Control")
+        self.label = tk.Label(self, text="Bảng điều khiển")
         self.label.grid(row=0, column=0, columnspan=2)
 
         # Button for image
-        self.upload_button = tk.Button(self, text="Upload Image")
+        self.upload_button = tk.Button(self, text="Tải ảnh lên")
         self.upload_button.grid(row=2, column=0, columnspan=2)
 
-        self.reset_button = tk.Button(self, text="Reset image")
+        self.reset_button = tk.Button(self, text="Cài đặt lại ảnh")
         self.reset_button.grid(row=3, column=0, columnspan=2)
 
         # Button for the 2 windows

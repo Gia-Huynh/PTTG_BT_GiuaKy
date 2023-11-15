@@ -23,6 +23,7 @@ class EigenFace:
         n_samples, h, w = lfw_people.images.shape
         X = lfw_people.data
         n_features = X.shape[1]
+        self.n_features = n_features
         y = lfw_people.target
         target_names = lfw_people.target_names
         n_classes = target_names.shape[0]
@@ -49,7 +50,7 @@ class EigenFace:
         print("Chuyển hệ cơ sở của dữ liệu đầu vào sang hệ cơ sở vuông góc eigenfaces")
         X_train_pca = pca.transform(X_train)
         X_test_pca = pca.transform(X_test)
-        print("Fitting the classifier to the training set")
+        # print("Fitting the classifier to the training set")
         print("Khớp hóa (fitting) mô hình dự đoán vào bộ dữ liệu huấn luyện")
         param_grid = {
             "C": loguniform(1e3, 1e5),
@@ -84,6 +85,12 @@ class EigenFace:
         return self.target_names[result[0]].rsplit(" ", 1)[-1]
     def predict_img_list (self, inpImg):
         pass
+    def get_pca(self, image):
+        img2D = np.mean(cv2.resize(image, (47, 62)), axis = 2)
+        img1D = np.ravel (img2D).reshape(1, -1)
+        img1D = self.scaler.transform(img1D)
+        img1d_pca = self.pca.transform(img1D)
+        return img1d_pca
     
 ey = EigenFace ()
-result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+# result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")

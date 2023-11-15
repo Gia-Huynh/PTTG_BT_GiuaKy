@@ -8,3 +8,5 @@ Temp/*/*/*
 *.tar
 *.gz
 *.tgz
+
+.conda

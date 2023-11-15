@@ -11,7 +11,7 @@ from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-Num_Eigenface = 50
+Num_Eigenface = 30
 #100 in production
 min_faces = 100
 #70 in production
@@ -68,25 +68,26 @@ class EigenFace:
         self.clf = clf
         self.pca = pca
         self.target_names = target_names
-        self.eigenfaces = eigenfaces #(Num_Eigenface, 62, 47)
-    def title(y_pred, y_test, target_names, i):
-        pred_name = target_names[y_pred[i]].rsplit(" ", 1)[-1]
-        true_name = target_names[y_test[i]].rsplit(" ", 1)[-1]
-        return "Predicted: %s, True:      %s" % (pred_name, true_name)
+        self.eigenfaces = eigenfaces #shape: (Num_Eigenface, 62, 47)
+            
     def GetFeatureVectors (self, imgPath):
+        #Trả về vector đặc trưng, shape: (1, Num_Eigenface)
         img2D = np.mean(cv2.resize (cv2.imread (imgPath), (47, 62)), axis = 2)
         img1D = np.ravel (img2D).reshape(1, -1)
         img1D = self.scaler.transform(img1D)
         return self.pca.transform(img1D)
+    
     def predict_img_path (self, imgPath):
-        #inpImg: Greyscale, size: 62 x 47
-        #"lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg"
+        #Dự đoán ảnh đầu vào là class nào trong dataset huấn luyện.
+        #Trả về tên của người được dự đoán.
+        #inpImg: Greyscale, size: 62 x 47.
         img2D = np.mean(cv2.resize (cv2.imread (imgPath), (47, 62)), axis = 2)
         img1D = np.ravel (img2D).reshape(1, -1)
         img1D = self.scaler.transform(img1D)
         img1d_pca = self.pca.transform(img1D)
         result = self.clf.predict(img1d_pca)
         return self.target_names[result[0]].rsplit(" ", 1)[-1]
+    
     def get_Eigenfaces_And_Feature (self, imgPath, num = 10):
         #Trả về: List chứa Num phần tử, mỗi phần tử thứ i chứa 2 thằng con,
         #Thằng con đầu là phần tử thứ i của vector đặc trưng, thằng 2 là mặt eigen của nó
@@ -104,5 +105,8 @@ class EigenFace:
     
 ey = EigenFace ()
 result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
-result = ey.GetFeatureVectors("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
-result = ey.get_Eigenfaces_And_Feature("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+print (result)
+result2 = ey.GetFeatureVectors("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+print (result2)
+result3 = ey.get_Eigenfaces_And_Feature("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+print (result3)

@@ -33,20 +33,24 @@ class EigenFace:
         print("Số lớp: %d" % n_classes)
         print ("Kích thước dataset:",X.shape,", h:",h,", w:",w)
 
+        #Chia dataset đầu vào thành train và test, với 20% để test phần còn lại là train
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.20, random_state=69)
+        #Chuẩn hóa dataset đầu vào
         self.scaler = StandardScaler()
         X_train = self.scaler.fit_transform(X_train)
         X_test = self.scaler.transform(X_test)
+        
         n_components = Num_Eigenface
-        #150
-        print("Extracting the top %d eigenfaces from %d faces" % (n_components, X_train.shape[0]))
+        print("Lấy %d eigenfaces tốt nhất từ %d khuôn mặt" % (n_components, X_train.shape[0]))
         pca = PCA(n_components=n_components, svd_solver="randomized", whiten=True).fit(X_train)
         eigenfaces = pca.components_.reshape((n_components, h, w))
-        print("Projecting the input data on the eigenfaces orthonormal basis")
+        #print("Projecting the input data on the eigenfaces orthonormal basis")
+        print("Chuyển hệ cơ sở của dữ liệu đầu vào sang hệ cơ sở vuông góc eigenfaces")
         X_train_pca = pca.transform(X_train)
         X_test_pca = pca.transform(X_test)
         print("Fitting the classifier to the training set")
+        print("Khớp hóa (fitting) mô hình dự đoán vào bộ dữ liệu huấn luyện")
         param_grid = {
             "C": loguniform(1e3, 1e5),
             "gamma": loguniform(1e-4, 1e-1),
@@ -55,9 +59,9 @@ class EigenFace:
             SVC(kernel="rbf", class_weight="balanced"), param_grid, n_iter=10
         )
         clf = clf.fit(X_train_pca, y_train)
-        print("Best estimator found by grid search:")
+        print("Mô hình tốt nhất tìm được dựa trên giải thuật tìm kiếm lưới (grid search):")
         print(clf.best_estimator_)
-        print("Predicting people's names on the test set")
+        print("Dự đoán bộ dữ liệu kiểm tra (test set):")
         y_pred = clf.predict(X_test_pca)
         print(classification_report(y_test, y_pred, target_names=target_names))
         
@@ -68,7 +72,7 @@ class EigenFace:
     def title(y_pred, y_test, target_names, i):
         pred_name = target_names[y_pred[i]].rsplit(" ", 1)[-1]
         true_name = target_names[y_test[i]].rsplit(" ", 1)[-1]
-        return "predicted: %s\ntrue:      %s" % (pred_name, true_name)
+        return "Predicted: %s, True:      %s" % (pred_name, true_name)
     def predict_img_path (self, imgPath):
         #inpImg: Greyscale, size: 62 x 47
         #"lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg"
@@ -83,27 +87,3 @@ class EigenFace:
     
 ey = EigenFace ()
 result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
-
-"""def plot_gallery(images, titles, h, w, n_row=3, n_col=4):
-    #Helper function to plot a gallery of portraits
-    plt.figure(figsize=(1.8 * n_col, 2.4 * n_row))
-    plt.subplots_adjust(bottom=0, left=0.01, right=0.99, top=0.90, hspace=0.35)
-    for i in range(n_row * n_col):
-        plt.subplot(n_row, n_col, i + 1)
-        plt.imshow(images[i].reshape((h, w)), cmap=plt.cm.gray)
-        plt.title(titles[i], size=12)
-        plt.xticks(())
-        plt.yticks(())
-        #
-
-
-
-prediction_titles = [
-    title(y_pred, y_test, target_names, i) for i in range(y_pred.shape[0])
-]
-
-plot_gallery(X_test, prediction_titles, h, w)
-eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
-plot_gallery(eigenfaces, eigenface_titles, h, w)
-
-plt.show()"""

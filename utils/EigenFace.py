@@ -35,8 +35,8 @@ class EigenFace:
         print ("Kích thước dataset:",X.shape,", h:",h,", w:",w)
 
         #Chia dataset đầu vào thành train và test, với 20% để test phần còn lại là train
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.20, random_state=69)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=69)
+        
         #Chuẩn hóa dataset đầu vào
         self.scaler = StandardScaler()
         X_train = self.scaler.fit_transform(X_train)
@@ -69,14 +69,12 @@ class EigenFace:
         self.clf = clf
         self.pca = pca
         self.target_names = target_names
-        self.eigenfaces = eigenfaces
+        self.eigenfaces = eigenfaces #(Num_Eigenface, 62, 47)
     def title(y_pred, y_test, target_names, i):
         pred_name = target_names[y_pred[i]].rsplit(" ", 1)[-1]
         true_name = target_names[y_test[i]].rsplit(" ", 1)[-1]
         return "Predicted: %s, True:      %s" % (pred_name, true_name)
     def GetFeatureVectors (self, imgPath):
-        #inpImg: Greyscale, size: 62 x 47
-        #"lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg"
         img2D = np.mean(cv2.resize (cv2.imread (imgPath), (47, 62)), axis = 2)
         img1D = np.ravel (img2D).reshape(1, -1)
         img1D = self.scaler.transform(img1D)
@@ -90,9 +88,25 @@ class EigenFace:
         img1d_pca = self.pca.transform(img1D)
         result = self.clf.predict(img1d_pca)
         return self.target_names[result[0]].rsplit(" ", 1)[-1]
+    def get_Eigenfaces_And_Feature (self, imgPath, num = 10):
+        #Trả về: List chứa Num phần tử, mỗi phần tử thứ i chứa 2 thằng con,
+        #Thằng con đầu là phần tử thứ i của vector đặc trưng, thằng 2 là mặt eigen của nó
+        #Access: result[0][0] là một số float
+        #result [0][1] có shape = (62, 47), đưa vào cv2 imshow thì chắc add axis
+        
+        #(1, 50)[0] = (50)
+        FtVectors = self.GetFeatureVectors (imgPath)[0]
+        result = []
+        for i in range (num):
+            result.append ([FtVectors[i], self.eigenfaces[i]])
+        return result
     def predict_img_list (self, inpImg):
         pass
     
 # ey = EigenFace ()
 # result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
 # result = ey.GetFeatureVectors("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+# ey = EigenFace ()
+# result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+# result = ey.GetFeatureVectors("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+# result = ey.get_Eigenfaces_And_Feature("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")

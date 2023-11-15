@@ -73,6 +73,13 @@ class EigenFace:
         pred_name = target_names[y_pred[i]].rsplit(" ", 1)[-1]
         true_name = target_names[y_test[i]].rsplit(" ", 1)[-1]
         return "Predicted: %s, True:      %s" % (pred_name, true_name)
+    def GetFeatureVectors (self, imgPath):
+        #inpImg: Greyscale, size: 62 x 47
+        #"lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg"
+        img2D = np.mean(cv2.resize (cv2.imread (imgPath), (47, 62)), axis = 2)
+        img1D = np.ravel (img2D).reshape(1, -1)
+        img1D = self.scaler.transform(img1D)
+        return self.pca.transform(img1D)
     def predict_img_path (self, imgPath):
         #inpImg: Greyscale, size: 62 x 47
         #"lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg"
@@ -87,3 +94,4 @@ class EigenFace:
     
 ey = EigenFace ()
 result = ey.predict_img_path("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
+result = ey.GetFeatureVectors("lfw\\Aaron_Eckhart\\Aaron_Eckhart_0001.jpg")
